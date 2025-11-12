@@ -20,8 +20,10 @@ recipesRouter.get("/:id", async (req, res) => {
 recipesRouter.post("/", async (req, res) => {
   const db = await dbPromise;
   const data = req.body.data;
-  await db.run(
-    "INSERT INTO recipes (title, preparationTime, difficulty, budget, description,) VALUES (?, ?, ?, ?, ?)",
+
+  // 1) Insert recette (⚠️ virgule retirée après "description")
+  const result = await db.run(
+    "INSERT INTO recipes (title, preparationTime, difficulty, budget, description) VALUES (?, ?, ?, ?, ?)",
     [
       data.title,
       data.preparationTime,
@@ -30,7 +32,20 @@ recipesRouter.post("/", async (req, res) => {
       data.description,
     ]
   );
-  res.json({ message: "Recette ajoutée" });
+
+  // 2) Lier les ingrédients existants (IDs) si fournis
+  const recipeId = result.lastID;
+  if (Array.isArray(data.ingredients) && data.ingredients.length > 0) {
+    const stmt = await db.prepare(
+      "INSERT INTO recipe_ingredients (recipe_id, ingredient_id) VALUES (?, ?)"
+    );
+    for (const ingredientId of data.ingredients) {
+      await stmt.run(recipeId, ingredientId);
+    }
+    await stmt.finalize();
+  }
+
+  res.json({ message: "Recette ajoutée", recipeId });
 });
 
 recipesRouter.put("/:id", async (req, res) => {
