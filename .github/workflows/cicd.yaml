@@ -25,3 +25,9 @@ jobs:
 
       - name: Docker build
         run: docker build -t marmiton-express .
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Render
+        run: curl ${{secrets.RENDER_DEPLOY_HOOK_URL}}
