@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 import sqlite3 from "sqlite3";
 import { open } from "sqlite";
-import { recipesRouter } from "./routes/recette.js";
+import { recipesRouter } from "./routes/recettes.js";
 import { ingredientsRouter } from "./routes/ingredients.js";
 import { authRouter } from "./routes/auth.js";
 import dotenv from "dotenv";
