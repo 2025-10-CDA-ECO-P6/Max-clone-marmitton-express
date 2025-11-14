@@ -29,8 +29,8 @@ recipesRouter.get("/:id", async (req, res) => {
 
     const ingredients = await db.all(
       `SELECT ingredients.* FROM ingredients
-       JOIN recipe_ingredients ON ingredients.id = recipe_ingredients.ingredient_id
-       WHERE recipe_ingredients.recipe_id = ?`,
+        JOIN recipe_ingredients ON ingredients.id = recipe_ingredients.ingredient_id
+        WHERE recipe_ingredients.recipe_id = ?`,
       [id]
     );
 
