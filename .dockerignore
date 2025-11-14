@@ -1,1 +1,6 @@
 node_modules
+db.db
+http-requests
+.git
+.DS_Store
+Dockerfile
